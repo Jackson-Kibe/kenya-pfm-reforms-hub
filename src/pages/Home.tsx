@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,13 +11,21 @@ import {
   Play,
   Target,
   CheckCircle,
-  Award
+  Award,
+  X
 } from 'lucide-react';
 
-const AnimatedCounter = ({ end, duration = 2000, suffix = '' }: { end: number; duration?: number; suffix?: string }) => {
+const AnimatedCounter = ({ end, duration = 2000, suffix = '', isVisible }: { 
+  end: number; 
+  duration?: number; 
+  suffix?: string;
+  isVisible: boolean;
+}) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
+    if (!isVisible) return;
+    
     let start = 0;
     const increment = end / (duration / 16);
     const timer = setInterval(() => {
@@ -32,19 +39,86 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = '' }: { end: number; d
     }, 16);
 
     return () => clearInterval(timer);
-  }, [end, duration]);
+  }, [end, duration, isVisible]);
 
   return <span className="animate-counter-up">{count}{suffix}</span>;
 };
 
+const DynamicTypewriter = () => {
+  const phrases = ['transparency', 'accountability', 'efficiency', 'service delivery', 'digital finance'];
+  const [currentPhrase, setCurrentPhrase] = useState(0);
+  const [currentText, setCurrentText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+
+  useEffect(() => {
+    const handleTyping = () => {
+      const current = phrases[currentPhrase];
+      
+      if (isDeleting) {
+        setCurrentText(current.substring(0, currentText.length - 1));
+        setTypingSpeed(50);
+      } else {
+        setCurrentText(current.substring(0, currentText.length + 1));
+        setTypingSpeed(150);
+      }
+
+      if (!isDeleting && currentText === current) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      } else if (isDeleting && currentText === '') {
+        setIsDeleting(false);
+        setCurrentPhrase((prev) => (prev + 1) % phrases.length);
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, currentPhrase, typingSpeed, phrases]);
+
+  return (
+    <span className="text-blue-200 border-r-2 border-blue-200 pr-1 animate-pulse">
+      {currentText}
+    </span>
+  );
+};
+
+const VideoModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 animate-fade-in">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden animate-scale-in">
+        <div className="flex justify-between items-center p-4 border-b">
+          <h3 className="text-xl font-semibold">Kenya's Public Finance Reform Journey</h3>
+          <Button variant="ghost" size="sm" onClick={onClose}>
+            <X className="w-5 h-5" />
+          </Button>
+        </div>
+        <div className="aspect-video">
+          <iframe
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            title="Kenya PFM Reform Video"
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [countersVisible, setCountersVisible] = useState(false);
+  const countersRef = useRef<HTMLDivElement>(null);
   
   const heroStats = [
-    { number: 8, suffix: '', label: 'Key Reform Areas' },
-    { number: 60, suffix: '+', label: 'Published Reports' },
-    { number: 10, suffix: '', label: 'Years of Progress' },
-    { number: 47, suffix: '', label: 'Counties Supported' }
+    { number: 60, suffix: '+', label: 'Reports Published' },
+    { number: 8, suffix: '', label: 'Key Result Areas' },
+    { number: 10, suffix: '+', label: 'Years of Reform' },
+    { number: 25, suffix: '+', label: 'Development Partners' }
   ];
 
   const navigationCards = [
@@ -106,46 +180,109 @@ const Home = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setCountersVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (countersRef.current) {
+      observer.observe(countersRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Enhanced Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary-dark to-primary-light text-white py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 right-10 w-20 h-20 bg-white/5 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-1/4 left-10 w-32 h-32 bg-white/5 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-blue-200/10 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-white/5 rounded-full animate-pulse" style={{ animationDelay: '3s' }}></div>
+        </div>
+        
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <svg className="w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="100" height="100" fill="url(#grid)" />
+          </svg>
+        </div>
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8 animate-fade-in">
+            <div className="space-y-8">
+              {/* Animated Headlines */}
               <div className="space-y-4">
                 <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                  Reforming Public Finance for a
-                  <span className="text-blue-200"> Better Kenya</span>
+                  <span className="block animate-slide-up" style={{ animationDelay: '0ms' }}>
+                    Reforming Public Finance
+                  </span>
+                  <span className="block animate-slide-up" style={{ animationDelay: '80ms' }}>
+                    for a
+                  </span>
+                  <span className="block text-blue-200 animate-slide-up" style={{ animationDelay: '160ms' }}>
+                    Better Kenya
+                  </span>
                 </h1>
-                <p className="text-xl lg:text-2xl text-blue-100 leading-relaxed">
-                  Strengthening financial management systems across government for improved transparency, accountability, and service delivery.
+                <p className="text-xl lg:text-2xl text-blue-100 leading-relaxed animate-fade-in" style={{ animationDelay: '600ms' }}>
+                  Strengthening financial management systems across government for improved{' '}
+                  <DynamicTypewriter />
                 </p>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="bg-white text-primary hover:bg-blue-50 font-semibold">
+              {/* Enhanced CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '800ms' }}>
+                <Button 
+                  asChild 
+                  size="lg" 
+                  className="bg-white text-primary hover:bg-blue-50 font-semibold hover:scale-105 transition-all duration-300 hover:shadow-lg"
+                >
                   <Link to="/strategy">
                     Explore Our Strategy
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Link>
                 </Button>
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary font-semibold">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="border-white text-white hover:bg-white hover:text-primary font-semibold hover:scale-105 transition-all duration-300 hover:shadow-lg"
+                  onClick={() => setIsVideoModalOpen(true)}
+                >
                   <Play className="w-5 h-5 mr-2" />
-                  Watch Overview
+                  Watch Reform Video
                 </Button>
               </div>
             </div>
 
-            <div className="relative animate-slide-up">
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-                <h3 className="text-2xl font-bold mb-6 text-center">Our Impact at a Glance</h3>
+            {/* Enhanced KPI Section */}
+            <div className="relative">
+              <div 
+                ref={countersRef}
+                className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-300"
+              >
+                <h3 className="text-2xl font-bold mb-6 text-center animate-fade-in">Our Impact at a Glance</h3>
                 <div className="grid grid-cols-2 gap-6">
                   {heroStats.map((stat, index) => (
-                    <div key={index} className="text-center">
+                    <div key={index} className="text-center animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
                       <div className="text-3xl lg:text-4xl font-bold text-blue-200">
-                        <AnimatedCounter end={stat.number} suffix={stat.suffix} />
+                        <AnimatedCounter 
+                          end={stat.number} 
+                          suffix={stat.suffix} 
+                          isVisible={countersVisible}
+                        />
                       </div>
                       <div className="text-sm text-blue-100 mt-1">{stat.label}</div>
                     </div>
@@ -155,10 +292,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-        
-        {/* Decorative Elements */}
-        <div className="absolute top-1/4 right-10 w-20 h-20 bg-white/5 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-1/4 left-10 w-32 h-32 bg-white/5 rounded-full animate-pulse delay-1000"></div>
       </section>
 
       {/* Navigation Cards */}
@@ -175,7 +308,11 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {navigationCards.map((card, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
+              <Card 
+                key={index} 
+                className="group hover:shadow-xl transition-all duration-300 animate-slide-up hover:scale-105 hover:-translate-y-1" 
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <CardContent className="p-6">
                   <div className={`w-12 h-12 rounded-lg ${card.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <card.icon className="w-6 h-6 text-white" />
@@ -225,7 +362,7 @@ const Home = () => {
                 ))}
               </div>
 
-              <Button asChild size="lg" className="bg-primary hover:bg-primary-dark">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary-dark hover:scale-105 transition-all duration-300">
                 <Link to="/strategy">
                   View Full Strategy
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -234,21 +371,21 @@ const Home = () => {
             </div>
 
             <div className="relative animate-slide-up">
-              <div className="bg-gradient-to-br from-primary to-primary-light rounded-2xl p-8 text-white">
+              <div className="bg-gradient-to-br from-primary to-primary-light rounded-2xl p-8 text-white hover:scale-105 transition-transform duration-300">
                 <div className="flex items-center mb-6">
                   <Award className="w-8 h-8 mr-3" />
                   <h3 className="text-2xl font-bold">Achievement Highlights</h3>
                 </div>
                 <div className="space-y-4">
-                  <div className="bg-white/10 rounded-lg p-4">
+                  <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
                     <div className="text-2xl font-bold">95%</div>
                     <div className="text-blue-100">Counties with improved PFM systems</div>
                   </div>
-                  <div className="bg-white/10 rounded-lg p-4">
+                  <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
                     <div className="text-2xl font-bold">KSh 2.1T</div>
                     <div className="text-blue-100">Better managed public resources</div>
                   </div>
-                  <div className="bg-white/10 rounded-lg p-4">
+                  <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
                     <div className="text-2xl font-bold">3M+</div>
                     <div className="text-blue-100">Citizens benefiting from reforms</div>
                   </div>
@@ -356,6 +493,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Video Modal */}
+      <VideoModal isOpen={isVideoModalOpen} onClose={() => setIsVideoModalOpen(false)} />
     </div>
   );
 };

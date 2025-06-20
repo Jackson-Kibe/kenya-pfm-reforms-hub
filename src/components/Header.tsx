@@ -10,8 +10,10 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 50);
     };
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -36,23 +38,29 @@ const Header = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-primary'
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+      isScrolled 
+        ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50' 
+        : 'bg-primary'
     }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white rounded-full flex items-center justify-center">
-              <span className="text-primary font-bold text-lg lg:text-xl">P</span>
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+              isScrolled ? 'bg-primary' : 'bg-white'
+            } group-hover:scale-110`}>
+              <span className={`font-bold text-lg lg:text-xl transition-colors duration-300 ${
+                isScrolled ? 'text-white' : 'text-primary'
+              }`}>P</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className={`font-poppins font-bold text-lg lg:text-xl ${
+              <h1 className={`font-poppins font-bold text-lg lg:text-xl transition-colors duration-300 ${
                 isScrolled ? 'text-primary' : 'text-white'
               }`}>
                 PFMRS
               </h1>
-              <p className={`text-xs lg:text-sm ${
+              <p className={`text-xs lg:text-sm transition-colors duration-300 ${
                 isScrolled ? 'text-secondary-foreground' : 'text-blue-100'
               }`}>
                 National Treasury of Kenya
@@ -66,23 +74,23 @@ const Header = () => {
               <div key={item.name} className="relative group">
                 <Link
                   to={item.path}
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors duration-200 font-poppins font-medium ${
+                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-300 font-poppins font-medium hover:scale-105 ${
                     isScrolled 
-                      ? 'text-secondary-foreground hover:text-primary hover:bg-accent'
-                      : 'text-white hover:text-blue-100 hover:bg-white/10'
+                      ? 'text-secondary-foreground hover:text-primary hover:bg-accent hover:shadow-md'
+                      : 'text-white hover:text-blue-100 hover:bg-white/10 hover:shadow-lg'
                   }`}
                 >
                   <span>{item.name}</span>
-                  {item.submenu && <ChevronDown className="w-4 h-4" />}
+                  {item.submenu && <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />}
                 </Link>
                 
                 {item.submenu && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 border border-gray-200">
                     {item.submenu.map((subItem) => (
                       <Link
                         key={subItem.name}
                         to={subItem.path}
-                        className="block px-4 py-3 text-secondary-foreground hover:text-primary hover:bg-accent first:rounded-t-lg last:rounded-b-lg transition-colors duration-200"
+                        className="block px-4 py-3 text-secondary-foreground hover:text-primary hover:bg-accent first:rounded-t-lg last:rounded-b-lg transition-all duration-200 hover:scale-105 hover:shadow-sm"
                       >
                         {subItem.name}
                       </Link>
@@ -98,8 +106,8 @@ const Header = () => {
             <Button
               variant="ghost"
               size="sm"
-              className={`hidden sm:flex ${
-                isScrolled ? 'text-secondary-foreground hover:text-primary' : 'text-white hover:text-blue-100'
+              className={`hidden sm:flex transition-all duration-300 hover:scale-110 hover:shadow-md ${
+                isScrolled ? 'text-secondary-foreground hover:text-primary hover:bg-accent' : 'text-white hover:text-blue-100 hover:bg-white/10'
               }`}
             >
               <Search className="w-5 h-5" />
@@ -108,8 +116,8 @@ const Header = () => {
             <Button
               variant="ghost"
               size="sm"
-              className={`lg:hidden ${
-                isScrolled ? 'text-secondary-foreground' : 'text-white'
+              className={`lg:hidden transition-all duration-300 hover:scale-110 ${
+                isScrolled ? 'text-secondary-foreground hover:bg-accent' : 'text-white hover:bg-white/10'
               }`}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -120,13 +128,14 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-200 animate-fade-in">
+          <div className="lg:hidden bg-white border-t border-gray-200 animate-fade-in shadow-lg">
             <nav className="py-4">
-              {menuItems.map((item) => (
+              {menuItems.map((item, index) => (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className="block px-4 py-3 text-secondary-foreground hover:text-primary hover:bg-accent transition-colors duration-200 font-poppins font-medium"
+                  className="block px-4 py-3 text-secondary-foreground hover:text-primary hover:bg-accent transition-all duration-200 font-poppins font-medium hover:scale-105 hover:shadow-sm animate-slide-up"
+                  style={{ animationDelay: `${index * 50}ms` }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
