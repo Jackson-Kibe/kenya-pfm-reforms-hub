@@ -13,7 +13,8 @@ import {
   CheckCircle,
   Award,
   X,
-  Share2
+  Share2,
+  ExternalLink
 } from 'lucide-react';
 
 const AnimatedCounter = ({ end, duration = 2000, suffix = '', isVisible }: { 
@@ -196,6 +197,69 @@ const Home = () => {
       excerpt: 'Creating opportunities through reformed public financial management in youth-focused programs.',
       image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500&h=300&fit=crop',
       impact: '50,000+ jobs created'
+    }
+  ];
+
+  const reformPartners = [
+    {
+      name: 'World Bank',
+      logo: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=200&h=100&fit=crop',
+      url: 'https://www.worldbank.org/en/country/kenya',
+      description: 'Supporting public financial management reforms'
+    },
+    {
+      name: 'European Union',
+      logo: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=200&h=100&fit=crop',
+      url: 'https://ec.europa.eu/international-partnerships/where-we-work/kenya_en',
+      description: 'Promoting governance and accountability'
+    },
+    {
+      name: 'GESDeK',
+      logo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=100&fit=crop',
+      url: 'https://www.kfw.de/About-KfW/KfW-office-worldwide/Sub-Sahara-Africa/Kenya/',
+      description: 'Government Economic Strategy for Devolution in Kenya'
+    },
+    {
+      name: 'PASEDE',
+      logo: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=200&h=100&fit=crop',
+      url: 'https://www.devolution.go.ke/',
+      description: 'Public Administration and Service Efficiency for Devolution Enhancement'
+    },
+    {
+      name: 'UNICEF',
+      logo: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=200&h=100&fit=crop',
+      url: 'https://www.unicef.org/kenya/',
+      description: 'Supporting child-focused public financial management'
+    },
+    {
+      name: 'KfW',
+      logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=200&h=100&fit=crop',
+      url: 'https://www.kfw.de/About-KfW/KfW-office-worldwide/Sub-Sahara-Africa/Kenya/',
+      description: 'German Development Bank'
+    },
+    {
+      name: 'International Monetary Fund',
+      logo: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511?w=200&h=100&fit=crop',
+      url: 'https://www.imf.org/en/Countries/KEN',
+      description: 'Supporting fiscal policy and economic reforms'
+    },
+    {
+      name: 'African Development Bank',
+      logo: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=200&h=100&fit=crop',
+      url: 'https://www.afdb.org/en/countries/east-africa/kenya',
+      description: 'Financing infrastructure and governance projects'
+    },
+    {
+      name: 'Swedish International Development',
+      logo: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=200&h=100&fit=crop',
+      url: 'https://www.sida.se/en/sidas-international-work/africa/kenya',
+      description: 'Supporting democratic governance and human rights'
+    },
+    {
+      name: 'PFM Academy',
+      logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=200&h=100&fit=crop',
+      url: 'https://pfm.go.ke/',
+      description: 'Building capacity in public financial management'
     }
   ];
 
@@ -383,6 +447,102 @@ const Home = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Reform Partners Section */}
+      <section className="py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div 
+            className="absolute inset-0 bg-contain bg-center bg-no-repeat"
+            style={{
+              backgroundImage: `url('https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1920&h=1080&fit=crop')`
+            }}
+          />
+        </div>
+
+        {/* Floating Reform Icons */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 right-20 w-16 h-16 bg-primary/5 rounded-full animate-pulse flex items-center justify-center">
+            <Target className="w-6 h-6 text-primary/30" />
+          </div>
+          <div className="absolute bottom-32 left-16 w-20 h-20 bg-primary/5 rounded-full animate-pulse flex items-center justify-center" style={{ animationDelay: '2s' }}>
+            <TrendingUp className="w-8 h-8 text-primary/30" />
+          </div>
+          <div className="absolute top-1/2 right-1/4 w-12 h-12 bg-primary/5 rounded-full animate-pulse flex items-center justify-center" style={{ animationDelay: '4s' }}>
+            <FileText className="w-5 h-5 text-primary/30" />
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-12 animate-fade-in">
+            <h2 className="text-3xl lg:text-4xl font-bold text-secondary-foreground mb-4">
+              Our Reform Partners
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              PFMR works in collaboration with key development partners to advance public financial management reforms in Kenya, 
+              fostering transparency, accountability, and improved service delivery across all government levels.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {reformPartners.map((partner, index) => (
+              <a
+                key={index}
+                href={partner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <Card className="h-full bg-white hover:bg-gray-50 border-2 border-transparent hover:border-primary/20 transition-all duration-300 hover:shadow-xl hover:scale-105 overflow-hidden">
+                  <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
+                    <div className="relative w-full h-20 flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden group-hover:bg-gray-200 transition-colors duration-300">
+                      <img
+                        src={partner.logo}
+                        alt={`${partner.name} logo`}
+                        className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h3 className="font-semibold text-secondary-foreground group-hover:text-primary transition-colors duration-300 text-sm">
+                        {partner.name}
+                      </h3>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        {partner.description}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      <span className="text-xs font-medium mr-1">Visit Website</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </a>
+            ))}
+          </div>
+
+          {/* Partnership Impact Stats */}
+          <div className="mt-16 bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-primary/10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                <div className="text-3xl font-bold text-primary mb-2">25+</div>
+                <div className="text-sm text-muted-foreground">Development Partners</div>
+              </div>
+              <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <div className="text-3xl font-bold text-primary mb-2">$2.5B+</div>
+                <div className="text-sm text-muted-foreground">Reform Investment</div>
+              </div>
+              <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                <div className="text-3xl font-bold text-primary mb-2">47</div>
+                <div className="text-sm text-muted-foreground">Counties Supported</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
