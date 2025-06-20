@@ -21,15 +21,11 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            {/* Placeholder routes for future pages */}
-            <Route path="/strategy" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-3xl font-bold text-primary">Strategy & Results - Coming Soon</h1></div>} />
-            <Route path="/monitoring" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-3xl font-bold text-primary">M&E Dashboard - Coming Soon</h1></div>} />
-            <Route path="/reports" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-3xl font-bold text-primary">Reports & Publications - Coming Soon</h1></div>} />
-            <Route path="/reforms" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-3xl font-bold text-primary">Reforms in Action - Coming Soon</h1></div>} />
-            <Route path="/news" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-3xl font-bold text-primary">News & Blog - Coming Soon</h1></div>} />
-            <Route path="/media" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-3xl font-bold text-primary">Media Hub - Coming Soon</h1></div>} />
-            <Route path="/contact" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-3xl font-bold text-primary">Contact Us - Coming Soon</h1></div>} />
-            <Route path="/faqs" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-3xl font-bold text-primary">FAQs - Coming Soon</h1></div>} />
+            {/* Updated routes for streamlined navigation */}
+            <Route path="/strategy" element={<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white"><div className="text-center"><h1 className="text-4xl font-bold text-primary mb-4">Our Strategy</h1><p className="text-xl text-gray-600">PFM Strategy 2023-2028 - Coming Soon</p></div></div>} />
+            <Route path="/partners" element={<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white"><div className="text-center"><h1 className="text-4xl font-bold text-primary mb-4">Development Partners</h1><p className="text-xl text-gray-600">Partner Support Matrix - Coming Soon</p></div></div>} />
+            <Route path="/reform-areas" element={<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white"><div className="text-center"><h1 className="text-4xl font-bold text-primary mb-4">PFM Reform Areas</h1><p className="text-xl text-gray-600">Key Result Areas - Coming Soon</p></div></div>} />
+            <Route path="/contact" element={<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white"><div className="text-center"><h1 className="text-4xl font-bold text-primary mb-4">Contact Us</h1><p className="text-xl text-gray-600">Get in Touch - Coming Soon</p></div></div>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

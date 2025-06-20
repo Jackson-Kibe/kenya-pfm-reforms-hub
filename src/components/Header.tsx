@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Search, ChevronDown } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Header = () => {
@@ -20,21 +20,11 @@ const Header = () => {
 
   const menuItems = [
     { name: 'Home', path: '/' },
-    { 
-      name: 'About', 
-      path: '/about',
-      submenu: [
-        { name: 'About PFMRS', path: '/about' },
-        { name: 'FAQs', path: '/faqs' }
-      ]
-    },
-    { name: 'Strategy & Results', path: '/strategy' },
-    { name: 'M&E', path: '/monitoring' },
-    { name: 'Reports', path: '/reports' },
-    { name: 'Reforms in Action', path: '/reforms' },
-    { name: 'News & Blog', path: '/news' },
-    { name: 'Media Hub', path: '/media' },
-    { name: 'Contact', path: '/contact' }
+    { name: 'About PFM', path: '/about' },
+    { name: 'Our Strategy', path: '/strategy' },
+    { name: 'Development Partners', path: '/partners' },
+    { name: 'PFM Reform Areas', path: '/reform-areas' },
+    { name: 'Contact Us', path: '/contact' }
   ];
 
   return (
@@ -47,20 +37,20 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+            <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-full flex items-center justify-center transition-all duration-300 ${
               isScrolled ? 'bg-primary' : 'bg-white'
-            } group-hover:scale-110`}>
-              <span className={`font-bold text-lg lg:text-xl transition-colors duration-300 ${
+            } group-hover:scale-110 shadow-lg`}>
+              <span className={`font-bold text-xl lg:text-2xl transition-colors duration-300 ${
                 isScrolled ? 'text-white' : 'text-primary'
               }`}>P</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className={`font-poppins font-bold text-lg lg:text-xl transition-colors duration-300 ${
+              <h1 className={`font-poppins font-bold text-xl lg:text-2xl transition-colors duration-300 ${
                 isScrolled ? 'text-primary' : 'text-white'
               }`}>
                 PFMRS
               </h1>
-              <p className={`text-xs lg:text-sm transition-colors duration-300 ${
+              <p className={`text-sm lg:text-base transition-colors duration-300 ${
                 isScrolled ? 'text-secondary-foreground' : 'text-blue-100'
               }`}>
                 National Treasury of Kenya
@@ -71,33 +61,17 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             {menuItems.map((item) => (
-              <div key={item.name} className="relative group">
-                <Link
-                  to={item.path}
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-300 font-poppins font-medium hover:scale-105 ${
-                    isScrolled 
-                      ? 'text-secondary-foreground hover:text-primary hover:bg-accent hover:shadow-md'
-                      : 'text-white hover:text-blue-100 hover:bg-white/10 hover:shadow-lg'
-                  }`}
-                >
-                  <span>{item.name}</span>
-                  {item.submenu && <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />}
-                </Link>
-                
-                {item.submenu && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 border border-gray-200">
-                    {item.submenu.map((subItem) => (
-                      <Link
-                        key={subItem.name}
-                        to={subItem.path}
-                        className="block px-4 py-3 text-secondary-foreground hover:text-primary hover:bg-accent first:rounded-t-lg last:rounded-b-lg transition-all duration-200 hover:scale-105 hover:shadow-sm"
-                      >
-                        {subItem.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`px-4 py-2 rounded-lg transition-all duration-300 font-poppins font-medium hover:scale-105 whitespace-nowrap ${
+                  isScrolled 
+                    ? 'text-secondary-foreground hover:text-primary hover:bg-accent hover:shadow-md'
+                    : 'text-white hover:text-blue-100 hover:bg-white/10 hover:shadow-lg'
+                }`}
+              >
+                {item.name}
+              </Link>
             ))}
           </nav>
 
